@@ -1,5 +1,5 @@
-# Reproducible Research: Peer Assessment 1
-
+Reproducible Research: Peer Assessment 1
+==========================================
 
 ## Loading and preprocessing the data
 
@@ -25,32 +25,12 @@ Code to:
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 df1 <- group_by(df, date) %>% summarize(sum(steps))
 hist(df1$`sum(steps)`, main = 'Histogram of Number of Steps Taken per Day',
      xlab = 'Number of Steps', col = 'blue')
 ```
 
-![](PA1_template_files/figure-html/steps_per_day, histogram, mean_median-1.png)<!-- -->
+![plot of chunk steps_per_day, histogram, mean_median](figure/steps_per_day, histogram, mean_median-1.png)
 
 ```r
 mean(df1$`sum(steps)`, na.rm = TRUE)
@@ -80,7 +60,7 @@ plot(df2$interval, df2$`sum(steps, na.rm = TRUE)`, type = 'l', col = 'blue',
      main = "What is the Average Daily Pattern?")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
+![plot of chunk average_daily_pattern](figure/average_daily_pattern-1.png)
 
 ```r
 df2 <- arrange(df2, desc(`sum(steps, na.rm = TRUE)`))
@@ -119,7 +99,7 @@ hist(df5$`sum(imputed_steps)`, main = 'Histogram of Number of Steps (Imputed) Ta
      xlab = 'Number of Steps', col = 'blue')
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![plot of chunk histogram_2](figure/histogram_2-1.png)
 
 ```r
 mean(df5$`sum(imputed_steps)`)
@@ -146,23 +126,23 @@ These values are practically the exact same as the mean and median of the origin
 df4 <- mutate(df4, day = weekdays(df4$date))
 day_type <- ifelse(df4$day %in% c('Saturday','Sunday'), 'weekend', 'weekday')
 df4$day_type <- day_type
-df6 <- group_by(df4, interval, day_type) %>% summarize(sum(imputed_steps))
+df6 <- group_by(df4, interval, day_type) %>% summarize(mean(imputed_steps))
 par(mfrow = c(2,1),
     cex = 0.5,
     cex.lab = 2,
     cex.main = 2.5,
     mar = c(4,5,3,1))
-with(filter(df6, day_type == 'weekday'), plot(interval, `sum(imputed_steps)`,
+with(filter(df6, day_type == 'weekday'), plot(interval, `mean(imputed_steps)`,
                                               type = 'l', xlab = "",
                                               ylab = "Steps Taken",
                                               main = "Weekday"))
-with(filter(df6, day_type == 'weekend'), plot(interval, `sum(imputed_steps)`,
+with(filter(df6, day_type == 'weekend'), plot(interval, `mean(imputed_steps)`,
                                               type = 'l', main = "Weekend",
                                               ylab = "Steps Taken", xlab = "Interval Number",
-                                              ylim = as.numeric(range(df6$`sum(imputed_steps)`))))
+                                              ylim = as.numeric(range(df6$`mean(imputed_steps)`))))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![plot of chunk panel_plot](figure/panel_plot-1.png)
 
 
 
