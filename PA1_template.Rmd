@@ -34,7 +34,7 @@ median(df1$`sum(steps)`, na.rm = TRUE)
 
 Code to calculate the average daily pattern (interval number against number of steps taken per day, averaged across all days in dataset) and to report the interval number with the highest number of steps taken (on average).  
 
-```{r}
+```{r average_daily_pattern}
 df2 <- group_by(df, interval) %>% summarize(sum(steps, na.rm = TRUE))
 plot(df2$interval, df2$`sum(steps, na.rm = TRUE)`, type = 'l', col = 'blue',
      xlab = "Interval Number", ylab = "Number of Steps (Averaged Across All Days)",
@@ -50,7 +50,7 @@ Code to:
 2. Impute mean of steps by interval as replacement for NA's and save as a new column (imputed_steps) in a new data frame (df4).    
 3. Create a histogram of steps taken per day of  **new** dataset and calculate the mean and median of **new** dataset.  
 
-```{r}
+```{r histogram_2}
 sum(is.na(df$steps))
 df3 <- group_by(df, interval) %>% summarize(mean(steps, na.rm = TRUE))
 no_nas <- filter(df , is.na(steps) == FALSE)
@@ -69,24 +69,24 @@ These values are practically the exact same as the mean and median of the origin
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+```{r panel_plot}
 df4 <- mutate(df4, day = weekdays(df4$date))
 day_type <- ifelse(df4$day %in% c('Saturday','Sunday'), 'weekend', 'weekday')
 df4$day_type <- day_type
-df6 <- group_by(df4, interval, day_type) %>% summarize(sum(imputed_steps))
+df6 <- group_by(df4, interval, day_type) %>% summarize(mean(imputed_steps))
 par(mfrow = c(2,1),
     cex = 0.5,
     cex.lab = 2,
     cex.main = 2.5,
     mar = c(4,5,3,1))
-with(filter(df6, day_type == 'weekday'), plot(interval, `sum(imputed_steps)`,
+with(filter(df6, day_type == 'weekday'), plot(interval, `mean(imputed_steps)`,
                                               type = 'l', xlab = "",
                                               ylab = "Steps Taken",
                                               main = "Weekday"))
-with(filter(df6, day_type == 'weekend'), plot(interval, `sum(imputed_steps)`,
+with(filter(df6, day_type == 'weekend'), plot(interval, `mean(imputed_steps)`,
                                               type = 'l', main = "Weekend",
                                               ylab = "Steps Taken", xlab = "Interval Number",
-                                              ylim = as.numeric(range(df6$`sum(imputed_steps)`))))
+                                              ylim = as.numeric(range(df6$`mean(imputed_steps)`))))
 ```
 
 
